@@ -8,30 +8,34 @@ export default function Home() {
   const [interval, setInterval] = useState(5)
   const [isFetching, setIsFetching] = useState(true)
   const [chartType, setChartType] = useState('line')
+  const [key, setKey] = useState(Cookies.get('apiKey')) // Add this line
 
   useEffect(() => {
     const apiKey = Cookies.get('apiKey')
     const channelId = Cookies.get('channelId')
-
+  
+    let intervalId; // Declare intervalId here
+  
     if (apiKey && channelId) {
       const fetchData = async () => {
         try {
-          const response = await axios.get(`https://api.thingspeak.com/channels/${channelId}/feeds.json?api_key=${apiKey}`)
+          const response = await axios.get(`https://api.thingspeak.com/channels/${channelId}/feeds.json?api_key=${apiKey}&results=2`)
           setData(response.data)
         } catch (error) {
           console.error('Error fetching data:', error)
         }
       }
-
+  
       if (isFetching) {
         fetchData()
-
-        const intervalId = setInterval(fetchData, interval * 1000)
-
-        return () => clearInterval(intervalId)
+  
+        intervalId = setInterval(fetchData, interval * 1000)
       }
     }
-  }, [interval, isFetching])
+  
+    return () => clearInterval(intervalId) // Clear the interval here
+  }, [interval, isFetching, key])
+
 
   return (
     <div className="flex flex-col justify-center items-center m-4">
@@ -52,12 +56,13 @@ export default function Home() {
       {data ? (
         <div>
           <h2>Data from ThingSpeak:</h2>
-          <Chart type={chartType} data={data} />
-            <button onClick={() => setIsFetching(!isFetching)} className="mb-4 p-2 bg-blue-500 text-white rounded">
-              {isFetching ? 'Stop' : 'Start'}
-            </button>
+          <Chart type="line" data={data} />
+          <Chart type="bar" data={data} />
+          <Chart type="pie" data={data} />
+          <button onClick={() => setIsFetching(!isFetching)} className="mb-4 p-2 bg-blue-500 text-white rounded">
+            {isFetching ? 'Stop' : 'Start'}
+          </button>
         </div>
-      
       ) : (
         <h2>Please enter your API key and Channel ID in the sidebar to view data</h2>
       )}

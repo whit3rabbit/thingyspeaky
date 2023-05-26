@@ -18,9 +18,10 @@ function SidebarComponent() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
+  
     Cookies.set('apiKey', apiKey)
     Cookies.set('channelId', channelId)
+    setKey(apiKey)
   }
 
   return (
