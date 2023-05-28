@@ -1,7 +1,7 @@
 import Chart from 'chart.js/auto';
 import { useRef, useEffect } from 'react';
 
-function ChartComponent({ type, data }) {
+function ChartComponent({ type, data, fieldKey }) {
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
 
@@ -16,14 +16,12 @@ function ChartComponent({ type, data }) {
       { backgroundColor: 'rgb(255, 205, 86)', borderColor: 'rgba(255, 205, 86, 0.2)' },
     ]
 
-    const datasets = Object.keys(data.channel)
-      .filter(key => key.startsWith('field'))
-      .map((fieldKey, i) => ({
-        label: data.channel[fieldKey],
-        data: data.feeds.map(feed => feed[fieldKey]),
-        fill: false,
-        ...colors[i % colors.length],
-      }))
+    const datasets = [{
+      label: data.channel[fieldKey],
+      data: data.feeds.map(feed => feed[fieldKey]),
+      fill: false,
+      ...colors[0],
+    }]
 
     const chartData = {
       labels: data.feeds.map(feed => feed.created_at),
@@ -41,9 +39,10 @@ function ChartComponent({ type, data }) {
       type: type,
       data: chartData,
     });
-  }, [data, type]);
+  }, [data, type, fieldKey]);
 
   return <canvas ref={canvasRef}></canvas>
 }
 
 export default ChartComponent
+
