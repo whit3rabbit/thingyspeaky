@@ -24,7 +24,7 @@ function ChartComponent({ type, data, fieldKey }) {
     }]
 
     const chartData = {
-      labels: data.feeds.map(feed => feed.created_at),
+      labels: data.feeds.map(feed => new Date(feed.created_at).toLocaleString()),
       datasets,
     }
 

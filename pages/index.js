@@ -16,7 +16,7 @@ export default function Home() {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://api.thingspeak.com/channels/${channelId}/feeds.json?api_key=${apiKey}&results=2`);
+        const response = await axios.get(`https://api.thingspeak.com/channels/${channelId}/feeds.json?api_key=${apiKey}&results=5`);
         setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
