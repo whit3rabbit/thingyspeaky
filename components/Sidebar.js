@@ -1,12 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Sidebar from 'react-sidebar'
 import Cookies from 'js-cookie'
-import { FiMenu } from 'react-icons/fi'
+import { FiMenu, FiEye, FiEyeOff } from 'react-icons/fi'
 
 function SidebarComponent() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [apiKey, setApiKey] = useState('')
   const [channelId, setChannelId] = useState('')
+  const [showApiKey, setShowApiKey] = useState(false)
+
+  useEffect(() => {
+    const savedApiKey = Cookies.get('apiKey')
+    const savedChannelId = Cookies.get('channelId')
+
+    if (savedApiKey) {
+      setApiKey(savedApiKey)
+    }
+
+    if (savedChannelId) {
+      setChannelId(savedChannelId)
+    }
+  }, [])
 
   const openSidebar = () => {
     setSidebarOpen(true)
@@ -21,7 +35,6 @@ function SidebarComponent() {
   
     Cookies.set('apiKey', apiKey)
     Cookies.set('channelId', channelId)
-    setKey(apiKey)
   }
 
   return (
@@ -32,7 +45,12 @@ function SidebarComponent() {
           <form onSubmit={handleSubmit} className="space-y-4">
           <label className="flex flex-col">
             API Key:
-            <input type="text" value={apiKey} onChange={(e) => setApiKey(e.target.value)} className="p-2 bg-gray-800 text-white rounded" />
+            <div className="relative">
+              <input type={showApiKey ? "text" : "password"} value={apiKey} onChange={(e) => setApiKey(e.target.value)} className="p-2 bg-gray-800 text-white rounded" />
+              <button type="button" onClick={() => setShowApiKey(!showApiKey)} className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                {showApiKey ? <FiEyeOff size={24} /> : <FiEye size={24} />}
+              </button>
+            </div>
           </label>
           <label className="flex flex-col">
             Channel ID:
