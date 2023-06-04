@@ -1,7 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import ChartComponent from '../components/Chart';
+import dynamic from 'next/dynamic';
+
+// Dynamically import ChartComponent with SSR disabled
+const ChartComponent = dynamic(
+  () => import('../components/Chart'),
+  { ssr: false }
+);
 
 export default function Home() {
   const [data, setData] = useState(null);
