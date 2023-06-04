@@ -1,18 +1,24 @@
-# Next.js + TailwindCSS
+# Thingyspeaky
 
-Next.js Documentation: https://nextjs.org/docs<br>
-TailwindCSS Documentation: https://tailwindcss.com/docs/utility-first
+A next.js app to view your thingspeak.com data/charts.
 
-Next.js: The React Framework
-for Production.
-Next.js gives you the best developer experience with all the features you need for production: hybrid static & server rendering, TypeScript support, smart bundling, route pre-fetching, and more. No config needed.
+TLDR: Access here
+https://whit3rabbit.github.io/thingyspeaky/
 
-Tailwind is a utility-first CSS framework packed with classes like `flex`, `pt-4`, `text-center` and `rotate-90` that can be composed to build any design, directly in your markup.
+## Instructions
 
-Example:
-```html
-<div className="bg-slate-800 text-xl p-2 border border-gray-100">
-  <p className="m-2 text-white">TailwindCSS and Next.js</p>
-  <a href="..." className="text-red-300">Visit the documentation</a>
-</div>
-```
+Use the sidebar to enter your thinkspeak API key (read only) and channel ID. They are saved as cookies and you may need to refresh the page after you submit.
+
+** Nothing is saved on a backend, it's only saved in your browser **
+
+## A simple react app to view your thingspeak charts.
+
+* Uses cookies to save your api key
+* Uses apexcharts
+* Uses next.js/tailwindcss
+
+## Why?
+
+The logout timer on thingspeak.com is too short.  I wanted an easier way to view my charts without having to log in all the time.
+
+Also, it gave me a chance to play with next.js.
