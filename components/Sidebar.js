@@ -3,11 +3,13 @@ import Sidebar from 'react-sidebar'
 import Cookies from 'js-cookie'
 import { FiMenu, FiEye, FiEyeOff } from 'react-icons/fi'
 
-function SidebarComponent() {
+// Pass apiKey, setApiKey, channelId, and setChannelId as props
+function SidebarComponent({ apiKey, setApiKey, channelId, setChannelId }) {
+
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [apiKey, setApiKey] = useState('')
-  const [channelId, setChannelId] = useState('')
   const [showApiKey, setShowApiKey] = useState(false)
+  const [rememberMe, setRememberMe] = useState(false);
+
 
   useEffect(() => {
     const savedApiKey = Cookies.get('apiKey')
@@ -31,11 +33,17 @@ function SidebarComponent() {
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-  
-    Cookies.set('apiKey', apiKey)
-    Cookies.set('channelId', channelId)
-  }
+    e.preventDefault();
+
+    // Update the state in the parent component
+    setApiKey(apiKey);
+    setChannelId(channelId);
+
+    if (rememberMe) {
+      Cookies.set('apiKey', apiKey);
+      Cookies.set('channelId', channelId);
+    }
+  };
 
   return (
     <Sidebar
@@ -56,7 +64,10 @@ function SidebarComponent() {
             Channel ID:
             <input type="text" value={channelId} onChange={(e) => setChannelId(e.target.value)} className="p-2 bg-gray-800 text-white rounded" />
           </label>
-            <button type="submit" className="mt-4">Submit</button>
+            <div>
+              <input type="checkbox" id="rememberMe" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+              <label htmlFor="rememberMe">Remember Me</label>
+            </div>          
           </form>
         </div>
       }

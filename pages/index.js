@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
-import Cookies from 'js-cookie'
 import dynamic from 'next/dynamic';
+import Sidebar from '../components/Sidebar';
+import Cookies from 'js-cookie'
 
 // Dynamically import ChartComponent with SSR disabled
 const ChartComponent = dynamic(
@@ -9,17 +10,27 @@ const ChartComponent = dynamic(
   { ssr: false }
 );
 
-export default function Home() {
+// This is the parent component
+function Home() {
+  const [apiKey, setApiKey] = useState(Cookies.get('apiKey') || '');
+  const [channelId, setChannelId] = useState(Cookies.get('channelId') || '');
+
+  return (
+    <>
+      <Sidebar apiKey={apiKey} setApiKey={setApiKey} channelId={channelId} setChannelId={setChannelId} />
+      <MainPage apiKey={apiKey} channelId={channelId} />
+    </>
+  );
+}
+
+function MainPage({ apiKey, channelId }) {
   const [data, setData] = useState(null);
   const [fetchInterval, setFetchInterval] = useState(15); // Set default interval to 15 seconds
   const [isFetching, setIsFetching] = useState(true);
   const [chartType, setChartType] = useState('line');
   const intervalId = useRef(null);
-
+  
   useEffect(() => {
-    const apiKey = Cookies.get('apiKey');
-    const channelId = Cookies.get('channelId');
-
     const fetchData = async () => {
       try {
         const response = await axios.get(`https://api.thingspeak.com/channels/${channelId}/feeds.json?api_key=${apiKey}&results=5`);
@@ -39,7 +50,7 @@ export default function Home() {
         clearInterval(intervalId.current);
       }
     };
-  }, [fetchInterval, isFetching]);
+  }, [fetchInterval, isFetching, apiKey, channelId]); // Add apiKey and channelId to the dependency array
 
   const toggleFetching = () => {
     if (isFetching && intervalId.current) {
@@ -89,3 +100,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default Home;
